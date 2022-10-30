@@ -1,8 +1,0 @@
-C:/Users/bukov/OneDrive/Рабочий стол/OpenGL/build/CMakeFiles/OpenGL.dir
-C:/Users/bukov/OneDrive/Рабочий стол/OpenGL/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/bukov/OneDrive/Рабочий стол/OpenGL/build/CMakeFiles/ZERO_CHECK.dir
-C:/Users/bukov/OneDrive/Рабочий стол/OpenGL/build/external/glfw/CMakeFiles/ALL_BUILD.dir
-C:/Users/bukov/OneDrive/Рабочий стол/OpenGL/build/external/glfw/src/CMakeFiles/glfw.dir
-C:/Users/bukov/OneDrive/Рабочий стол/OpenGL/build/external/glfw/src/CMakeFiles/update_mappings.dir
-C:/Users/bukov/OneDrive/Рабочий стол/OpenGL/build/external/glad/CMakeFiles/glad.dir
-C:/Users/bukov/OneDrive/Рабочий стол/OpenGL/build/external/glad/CMakeFiles/ALL_BUILD.dir
