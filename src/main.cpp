@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
 int main(void)
 {
     GLFWwindow* window;
@@ -10,12 +12,13 @@ int main(void)
 		/* window properties */
 		const unsigned int windowWidth = 640;
 		const unsigned int windowHeight = 480;
-		const char* windowName = "Hello world"
+		const char* windowName = "Hello world";
 
 
     /* Initialize the library */
     if (!glfwInit())
         return -1;
+		//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(windowWidth, windowHeight, windowName, NULL, NULL);
@@ -33,6 +36,9 @@ int main(void)
 			std::cout << "Can't load GLAD!" << std::endl;
 			return -1;
 		}
+
+		glViewport(0, 0, windowWidth, windowHeight);
+		glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 		std::cout << "OpenGL " << GLVersion.major << "." << GLVersion.minor << std::endl;
 
@@ -53,4 +59,9 @@ int main(void)
 
     glfwTerminate();
     return 0;
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+		glViewport(0, 0, width, height);
 }
