@@ -19,3 +19,6 @@ git pull:
 	git fetch origin
 	git merge origin/master
 	git pull
+	
+update glfw:
+	git subtree pull --prefix=external/glfw glfw master --squash
