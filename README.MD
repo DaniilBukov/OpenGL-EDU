@@ -8,14 +8,14 @@ git initialize:
 	git config --global user.email "bukovda@gmail.com"
 	git init
 	git remote add origin https://github.com/DaniilBukov/OpenGL-EDU.git"
-	git branch -M main
+	git branch -M master
 	
 git commit:
 	git add .
 	git commit -m "message"
-	git push -u origin main
+	git push -u origin master
 	
 git pull:
 	git fetch origin
-	git merge origin/main
+	git merge origin/master
 	git pull
