@@ -14,3 +14,8 @@ git commit:
 	git add .
 	git commit -m "message"
 	git push -u origin main
+	
+git pull:
+	git fetch origin
+	git merge origin/main
+	git pull
