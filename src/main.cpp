@@ -7,12 +7,18 @@ int main(void)
 {
     GLFWwindow* window;
 
+		/* window properties */
+		const unsigned int windowWidth = 640;
+		const unsigned int windowHeight = 480;
+		const char* windowName = "Hello world"
+
+
     /* Initialize the library */
     if (!glfwInit())
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(windowWidth, windowHeight, windowName, NULL, NULL);
     if (!window)
     {
         glfwTerminate();
