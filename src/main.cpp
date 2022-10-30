@@ -88,7 +88,7 @@ int main(void)
 		char infoLog[512];
 		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
 
-		if(!success)
+		if (!success)
 		{
 			glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
 			std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
@@ -105,11 +105,33 @@ int main(void)
 		/* error check */
 		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
 
-		if(!success)
+		if (!success)
 		{
 			glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
 			std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
 		}
+
+		/* add shader program */
+		unsigned int shaderProgram;
+		shaderProgram = glCreateProgram();
+
+		/* attach shaders to program and linking */
+		glAttachShader(shaderProgram, vertexShader);
+		glAttachShader(shaderProgram, fragmentShader);
+		glLinkProgram(shaderProgram);
+
+		/* error check */
+		glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+		if (!success)
+		{
+			glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+			std::cout << "ERROR::SHADER::PROGRAM::LINKING::FAILED\n" << infoLog << std::endl;
+		}
+
+		glUseProgram(shaderProgram);
+
+		glDeleteShader(vertexShader);
+		glDeleteShader(fragmentShader);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
