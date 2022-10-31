@@ -62,17 +62,10 @@ int main(void)
 		std::cout << "OpenGL " << GLVersion.major << "." << GLVersion.minor << std::endl;
 
 
-		/* triangle vertex array */
-		float vertices[] = {
-				-0.5f, -0.5f, 0.0f,
-				0.5f, -0.5f, 0.0f,
-				0.0f, 0.5f, 0.0f
-		};
 
-		unsigned int VBO;
-		glGenBuffers(1, &VBO);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+
+
 
 
 		/* create vertex shader */
@@ -128,10 +121,41 @@ int main(void)
 			std::cout << "ERROR::SHADER::PROGRAM::LINKING::FAILED\n" << infoLog << std::endl;
 		}
 
-		glUseProgram(shaderProgram);
 
-		glDeleteShader(vertexShader);
-		glDeleteShader(fragmentShader);
+
+		/* triangle vertex array */
+		float vertices[] = {
+				-0.5f, -0.5f, 0.0f,
+				0.5f, -0.5f, 0.0f,
+				0.0f, 0.5f, 0.0f
+		};
+
+		/* create VBO and VAO */
+		unsigned int VBO, VAO;
+		glGenVertexArrays(1, &VAO);
+		glGenBuffers(1, &VBO);
+
+		/* copy array of vertices to buffer */
+		glBindVertexArray(VAO);
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+		/* create pointers for vertex attributes */
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+
+		/* unlink VBO */
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		/* unlink VAO */
+		glBindVertexArray(0);
+
+
+
+
+
+
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -141,6 +165,11 @@ int main(void)
 				glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+				/* use shader program to visualise the object */
+				glUseProgram(shaderProgram);
+				glBindVertexArray(VAO);
+				glDrawArrays(GL_TRIANGLES, 0, 3);
+
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
@@ -148,8 +177,13 @@ int main(void)
         glfwPollEvents();
     }
 
+		/* delete shaders */
+		glDeleteShader(vertexShader);
+		glDeleteShader(fragmentShader);
+
     glfwTerminate();
     return 0;
+
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
