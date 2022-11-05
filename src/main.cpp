@@ -182,7 +182,6 @@ int main(void)
 				float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
 				float redValue = (cos(timeValue) / 3.0f) + 0.5f;
 				float blueValue = (sin(timeValue + 0.785) / 2.0f) + 0.5f;
-				std::cout << greenValue << std::endl;
 				/* create uniform variable to translate value into shaders */
 				int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
 
