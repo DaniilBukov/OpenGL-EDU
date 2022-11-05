@@ -9,18 +9,21 @@ void processInput(GLFWwindow *window);
 const char *vertexShaderSource =
 		"#version 330 core\n"
 		"layout (location = 0) in vec3 aPos;\n"
+		"out vec4 vertexColor;\n"
 		"void main()\n"
 		"{\n"
-		"		gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+		"		gl_Position = vec4(aPos, 1.0);\n"
+		"		vertexColor = vec4(0.5, 1.0, 0.2, 1.0);\n"
 		"}\0";
 
 const char *fragmentShaderSource =
 		"#version 330 core\n"
 		"out vec4 FragColor;\n"
+		"in vec4 vertexColor;\n"
 		"\n"
 		"void main()\n"
 		"{\n"
-		"    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+		"    FragColor = vertexColor;\n"
 		"}\n";
 
 
@@ -125,14 +128,14 @@ int main(void)
 
 		/* triangle vertex array */
 		float vertices[] = {
-				 0.5f,  0.5f, 0.0f,
+				 0.0f,  0.5f, 0.0f,
 			 	 0.5f, -0.5f, 0.0f,
 				-0.5f, -0.5f, 0.0f,
-				-0.5f,  0.5f, 0.0f
+				//-0.5f,  0.5f, 0.0f
 		};
 		unsigned int indices[] = {
-			0, 1, 3,
-			1, 2, 3
+			0, 1, 2/*,
+			1, 2, 3*/
 		};
 
 		/* create VBO, VAO */
@@ -163,11 +166,11 @@ int main(void)
 		glBindVertexArray(0);
 
 		/* line mode */
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 
 
-			
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
@@ -179,7 +182,7 @@ int main(void)
 				/* use shader program to visualise the object */
 				glUseProgram(shaderProgram);
 				glBindVertexArray(VAO);
-				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+				glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 				glBindVertexArray(0);
 
         /* Swap front and back buffers */
