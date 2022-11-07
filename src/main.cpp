@@ -21,6 +21,7 @@ int main(void)
 	const unsigned int windowWidth = 640;
 	const unsigned int windowHeight = 480;
 	const char* windowName = "Hello world";
+	stbi_set_flip_vertically_on_load(true);
 
 
     /* Initialize the library */
@@ -60,16 +61,16 @@ int main(void)
 
 	/* triangle vertex array */
 	float vertices[] = {
-     // coords            // colors           // tex_coords
-     0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // upper right
-     0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // lower right
-    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // lower left
-    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // upper left 
-};
-	unsigned int indices[] = {
-		0, 1, 3,
-		1, 2, 3
-	};
+         // координаты        // цвета            // текстурные координаты
+         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // верхняя правая вершина
+         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // нижняя правая вершина
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // нижняя левая вершина
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // верхняя левая вершина 
+    };
+    unsigned int indices[] = {
+        0, 1, 3, // первый треугольник
+        1, 2, 3  // второй треугольник
+    };
 
 	/* create VBO, VAO, EBO */
 	unsigned int VBO, VAO, EBO;
@@ -102,19 +103,21 @@ int main(void)
 
 
 	//textures
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	unsigned int texture1, texture2;
+	
+	glGenTextures(1, &texture1);
+	glBindTexture(GL_TEXTURE_2D, texture1);
 
 		// set parameters for texture overlay and filtration for current texture object
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 		//load and generate texture
 	int width, height, nrChannels;
-	unsigned char *data = stbi_load("./src/textures/container.jpg", &width, &height, &nrChannels, 0);
+
+	unsigned char *data = stbi_load("./src/textures/container.jpg", &width, &height, &nrChannels, STBI_rgb);
 
 	if(data)
 	{
@@ -127,6 +130,36 @@ int main(void)
 	}
 	stbi_image_free(data);
 
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+
+		// set parameters for texture overlay and filtration for current texture object
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		//load and generate texture
+	
+
+	data = stbi_load("./src/textures/bookshelf.png", &width, &height, &nrChannels, STBI_rgb);
+
+	if(data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+	stbi_image_free(data);
+
+	ourShader.use();
+
+	glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0);
+	ourShader.setInt("texture2", 1);
+
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -136,7 +169,11 @@ int main(void)
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-		glBindTexture(GL_TEXTURE_2D, texture);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture1);
+
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
 			
 		ourShader.use();
 
